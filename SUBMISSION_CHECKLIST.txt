@@ -1,0 +1,208 @@
+SUBMISSION CHECKLIST FOR SECURE CHAT SYSTEM
+===========================================
+
+Student: i221077
+GitHub: https://github.com/Abdullahzg/Infosec_A2_i221077
+
+WHAT YOU NEED TO SUBMIT ON GCR:
+================================
+
+1. GITHUB REPOSITORY ZIP
+   - Go to: https://github.com/Abdullahzg/Infosec_A2_i221077
+   - Click "Code" button
+   - Click "Download ZIP"
+   - Save as: Infosec_A2_i221077.zip
+
+2. DATABASE SCHEMA FILE
+   - File: schema.sql
+   - Location: Project root folder
+   - Already created and ready
+
+3. MAIN REPORT (Generate with ChatGPT)
+   - Use prompts from deleted LATEX_REPORT_PROMPTS.md
+   - Or write manually covering:
+     * GitHub workflow (14 commits)
+     * PKI setup (CA, server cert, client cert)
+     * Registration and login security
+     * AES-128 encryption
+     * Message integrity and signatures
+     * Non-repudiation (transcripts and receipts)
+   - Save as: i221077-YourName-Report-A02.docx
+   - Length: 5-7 pages
+
+4. TEST REPORT (Generate with ChatGPT)
+   - Cover all tests:
+     * Certificate validation tests
+     * Message tampering tests
+     * Replay attack tests
+     * Wireshark network analysis
+     * Database security tests
+     * Offline verification tests
+   - Include terminal output examples
+   - Save as: i221077-YourName-TestReport-A02.docx
+   - Length: 4-6 pages
+
+5. SCREENSHOTS (Capture these)
+   - Certificate generation output
+   - Server startup
+   - Client registration
+   - Client login
+   - Chat messages
+   - Certificate validation errors (BAD_CERT)
+   - Message tampering error (SIG_FAIL)
+   - Replay attack error (REPLAY)
+   - Database table structure
+   - Wireshark capture showing encrypted traffic
+   - Offline verification success
+
+6. WIRESHARK PCAP FILES
+   - Capture 1: Registration traffic
+   - Capture 2: Chat session traffic
+   - Filter used: tcp.port == 8443
+   - Save as .pcap files
+
+VERIFICATION BEFORE SUBMISSION:
+===============================
+
+GitHub Repository:
+[ ] Has 16 commits (more than required 10)
+[ ] README.md exists and complete
+[ ] .gitignore exists
+[ ] No .pem files in git history
+[ ] No .env file in git history
+[ ] Repository is public/accessible
+
+Database:
+[ ] schema.sql file exists
+[ ] Contains users table definition
+[ ] Shows salt as varbinary(16)
+[ ] Shows pwd_hash as char(64)
+
+Code Files:
+[ ] server.py exists
+[ ] client.py exists
+[ ] verify.py exists
+[ ] crypto_utils.py exists
+[ ] db_utils.py exists
+[ ] protocol.py exists
+[ ] transcript_utils.py exists
+[ ] scripts/gen_ca.py exists
+[ ] scripts/gen_cert.py exists
+
+Configuration:
+[ ] .env.example exists
+[ ] requirements.txt exists
+[ ] .gitignore properly configured
+
+Tests:
+[ ] All test files exist (test_*.py)
+[ ] Can run certificate generation
+[ ] Can run server
+[ ] Can run client
+[ ] Can verify transcripts
+
+GRADING RUBRIC COVERAGE:
+=========================
+
+1. GitHub Workflow (20%)
+   [ ] 14 commits (exceeds 10 requirement)
+   [ ] Clear README with instructions
+   [ ] Proper .gitignore
+   [ ] No secrets committed
+   [ ] Repository accessible
+
+2. PKI Setup (20%)
+   [ ] CA certificate works
+   [ ] Server certificate issued
+   [ ] Client certificate issued
+   [ ] Mutual verification works
+   [ ] Invalid certs rejected
+   [ ] Expired certs rejected
+
+3. Registration & Login (20%)
+   [ ] Random salt per user (16 bytes)
+   [ ] SHA-256 salted hashing
+   [ ] No plaintext passwords
+   [ ] Credentials encrypted in transit
+   [ ] Constant-time comparison
+
+4. Encrypted Chat (20%)
+   [ ] DH key exchange after login
+   [ ] AES-128 encryption
+   [ ] PKCS#7 padding
+   [ ] Clean send/receive
+   [ ] Error handling
+
+5. Integrity & Non-Repudiation (10%)
+   [ ] SHA-256 message digest
+   [ ] RSA signatures
+   [ ] Sequence number replay protection
+   [ ] Append-only transcripts
+   [ ] Session receipts
+   [ ] Offline verification
+
+6. Testing & Evidence (10%)
+   [ ] Wireshark captures
+   [ ] Certificate rejection tests
+   [ ] Tampering tests
+   [ ] Replay tests
+   [ ] Reproducible steps
+
+QUICK TEST COMMANDS:
+====================
+
+Generate Certificates:
+  python scripts/gen_ca.py
+  python scripts/gen_cert.py server
+  python scripts/gen_cert.py client
+
+Start Server:
+  python server.py
+
+Start Client:
+  python client.py
+
+Verify Transcript:
+  python verify.py --transcript transcripts/session_xxx.txt --receipt receipts/session_xxx_client_receipt.json --cert certs/server_cert.pem
+
+Check Git:
+  git log --oneline
+  git log --all --full-history -- "*.pem"
+  git log --all --full-history -- ".env"
+
+FINAL CHECKLIST:
+================
+
+Before submitting to GCR:
+[ ] Downloaded repository ZIP
+[ ] Copied schema.sql
+[ ] Generated main report (5-7 pages)
+[ ] Generated test report (4-6 pages)
+[ ] Collected all screenshots
+[ ] Saved Wireshark PCAP files
+[ ] Added roll number to reports
+[ ] Added name to reports
+[ ] Checked file names are correct
+[ ] Verified all files open correctly
+
+SUBMISSION FILES:
+=================
+
+1. Infosec_A2_i221077.zip
+2. schema.sql
+3. i221077-YourName-Report-A02.docx
+4. i221077-YourName-TestReport-A02.docx
+5. Screenshots folder (optional but recommended)
+6. Wireshark PCAP files (optional but recommended)
+
+NOTES:
+======
+
+- Repository has 16 commits (exceeds requirement)
+- All code is clean and documented
+- No secrets in git history
+- README is simple English
+- All security features implemented
+- All tests pass
+
+Good luck with submission!
