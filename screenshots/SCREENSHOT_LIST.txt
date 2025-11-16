@@ -1,0 +1,99 @@
+SCREENSHOT LIST FOR SECURE CHAT SYSTEM
+========================================
+
+All screenshots saved in screenshots/ folder
+
+GITHUB & SETUP (Screenshots 1-7):
+----------------------------------
+01_git_commits.png          - Git log showing 17 commits
+02_gitignore.png            - .gitignore file showing proper exclusions
+03_ca_generation.png        - CA certificate generation output
+04_server_cert.png          - Server certificate generation output
+05_client_cert.png          - Client certificate generation output
+06_cert_details.png         - Certificate details (Issuer, Subject, dates)
+07_database_schema.png      - Database schema showing users table
+
+SYSTEM OPERATION (Screenshots 8-13):
+-------------------------------------
+08_server_startup.png       - Server starting and listening
+09_client_connection.png    - Client connection and certificate exchange
+10_registration_success.png - User registration with salt and hash
+11_chat_message_sent.png    - Sending encrypted chat message
+12_server_received_message.png - Server receiving and decrypting message
+13_session_closure.png      - Session closure with receipt generation
+
+NON-REPUDIATION (Screenshots 14-16):
+-------------------------------------
+14_transcript_file.png      - Transcript file showing encrypted messages
+15_receipt_file.png         - Receipt JSON with signed transcript hash
+16_offline_verification.png - Verification tool checking signatures
+
+SECURITY TESTS (Screenshots 17-19):
+------------------------------------
+17_bad_cert_tests.png       - Certificate rejection tests (BAD_CERT_EXPIRED, BAD_CERT_SELF_SIGNED, BAD_CERT_UNTRUSTED)
+18_sig_fail_test.png        - Signature verification and tampering detection (SIG_FAIL)
+19_replay_test.png          - Replay attack detection (REPLAY)
+
+TOTAL: 19 screenshots
+
+WHAT EACH SCREENSHOT PROVES:
+============================
+
+GitHub Workflow (20%):
+- 01: Shows 17 commits (exceeds 10 requirement)
+- 02: Shows proper .gitignore excluding secrets
+
+PKI Setup (20%):
+- 03: CA generation works
+- 04: Server certificate issued
+- 05: Client certificate issued
+- 06: Certificate details valid (SHA-256, RSA)
+
+Registration & Login (20%):
+- 07: Database schema with salt (varbinary 16) and pwd_hash (char 64)
+- 10: Registration showing salt generation and password hashing
+
+Encrypted Chat (20%):
+- 08: Server startup
+- 09: DH key exchange for session
+- 11: Message encrypted and sent
+- 12: Message received and decrypted
+
+Integrity & Non-Repudiation (10%):
+- 13: Session closure with receipt
+- 14: Transcript with encrypted messages and signatures
+- 15: Receipt with signed transcript hash
+- 16: Offline verification tool
+
+Testing & Evidence (10%):
+- 17: BAD_CERT tests (expired, self-signed, untrusted)
+- 18: SIG_FAIL test (tampering detection)
+- 19: REPLAY test (replay attack detection)
+- All screenshots show reproducible steps
+- Terminal outputs visible
+- Process is clear
+
+GRADING RUBRIC COVERAGE:
+========================
+
+✓ GitHub: 17 commits, README, .gitignore, no secrets
+✓ PKI: CA + server cert + client cert working
+✓ Registration: Random salt, SHA-256 hashing, encrypted transit
+✓ Encryption: DH key exchange, AES-128, PKCS#7 padding
+✓ Integrity: RSA signatures, sequence numbers, replay protection
+✓ Non-Repudiation: Transcripts, receipts, offline verification
+✓ Testing: All steps shown with terminal output
+
+NOTES FOR REPORTS:
+==================
+
+Use these screenshots in your reports:
+- Main Report: Use 01-07 to show system setup
+- Test Report: Use all 16 to show test results
+
+Each screenshot has terminal output showing:
+- Commands executed
+- Results obtained
+- Success/failure status
+
+All screenshots are evidence that system works correctly.
