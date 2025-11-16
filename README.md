@@ -1,49 +1,40 @@
 # Secure Chat System
 
-A console-based secure chat application implementing cryptographic protocols to achieve Confidentiality, Integrity, Authenticity, and Non-Repudiation (CIANR).
+A console chat application with encryption and security features.
 
-## Overview
+## What This Is
 
-This system demonstrates practical cryptographic implementations using:
-- **AES-128** for message encryption
-- **RSA with X.509 certificates** for authentication and digital signatures
-- **Diffie-Hellman key exchange** for session key establishment
-- **SHA-256** for hashing and integrity verification
+This is chat system for two people. It uses encryption to keep messages safe. Nobody can read the messages except sender and receiver.
 
-The system protects against:
-- Passive eavesdropping
-- Active Man-in-the-Middle attacks
-- Replay attacks
-- Unauthorized access attempts
+## Main Features
 
-## Features
+- Certificate authentication for both sides
+- Password encryption with random salt
+- AES-128 encryption for all messages
+- Digital signatures to prevent tampering
+- Protection against replay attacks
+- Message logs with cryptographic receipts
 
-- **PKI Infrastructure**: Self-built Certificate Authority for issuing and validating certificates
-- **Mutual Authentication**: Both client and server verify each other's certificates
-- **Secure Registration/Login**: Credentials encrypted with temporary DH-derived keys
-- **Encrypted Chat**: Messages encrypted with session-specific AES keys
-- **Message Integrity**: RSA signatures prevent tampering
-- **Replay Protection**: Sequence numbers prevent message replay
-- **Non-Repudiation**: Session transcripts and cryptographic receipts provide proof of communication
+## What You Need
 
-## Prerequisites
+Before you start, you need these things:
 
-Before setting up the system, ensure you have:
+1. Python 3.8 or newer version
+2. MySQL 8.0 or newer version
+3. pip package manager
 
-1. **Python 3.8+** installed on your system
-2. **MySQL 8.0+** installed and running
-3. **pip** package manager
+## How to Install
 
-## Installation
-
-### 1. Clone the Repository
+### Step 1: Get the Code
 
 ```bash
-git clone <your-github-repo-url>
-cd securechat
+git clone https://github.com/Abdullahzg/Infosec_A2_i221077.git
+cd Infosec_A2_i221077
 ```
 
-### 2. Create Virtual Environment (Recommended)
+### Step 2: Make Virtual Environment
+
+This step is optional but recommended.
 
 ```bash
 python -m venv venv
@@ -51,19 +42,19 @@ python -m venv venv
 # On Windows
 venv\Scripts\activate
 
-# On Linux/Mac
+# On Linux or Mac
 source venv/bin/activate
 ```
 
-### 3. Install Dependencies
+### Step 3: Install Required Packages
 
 ```bash
 pip install -r requirements.txt
 ```
 
-### 4. Database Setup
+### Step 4: Setup Database
 
-Create the MySQL database and user:
+Open MySQL and run these commands:
 
 ```sql
 CREATE DATABASE securechat_db;
@@ -72,301 +63,254 @@ GRANT ALL PRIVILEGES ON securechat_db.* TO 'securechat_user'@'localhost';
 FLUSH PRIVILEGES;
 ```
 
-### 5. Configure Environment Variables
+### Step 5: Configure Settings
 
-Copy the example environment file and update with your credentials:
+Copy the example file and edit it:
 
 ```bash
 # On Windows
 copy .env.example .env
 
-# On Linux/Mac
+# On Linux or Mac
 cp .env.example .env
 ```
 
-Edit `.env` and update the database password and other settings as needed.
+Open .env file and change the password to match what you used in Step 4.
 
-### 6. Generate Certificates
+### Step 6: Create Certificates
 
-Generate the Certificate Authority:
+Run these commands to make certificates:
 
 ```bash
 python scripts/gen_ca.py
-```
-
-Generate server certificate:
-
-```bash
 python scripts/gen_cert.py server
-```
-
-Generate client certificate:
-
-```bash
 python scripts/gen_cert.py client
 ```
 
-Verify certificates (optional):
+## How to Use
 
-```bash
-openssl x509 -in certs/server_cert.pem -text -noout
-```
+### Start the Server
 
-## Usage
-
-### Starting the Server
+Open one terminal window and run:
 
 ```bash
 python server.py
 ```
 
-The server will start listening on the configured host and port (default: 127.0.0.1:8443).
+Server will start and wait for connections.
 
-### Starting the Client
+### Start the Client
 
-In a separate terminal:
+Open another terminal window and run:
 
 ```bash
 python client.py
 ```
 
-### Registration
+### Register New User
 
-1. When prompted, choose to register
-2. Enter your email address
-3. Enter a username
-4. Enter a password
-5. Wait for confirmation
+When client starts, you see two options:
+1. Register (new user)
+2. Login (existing user)
+
+For first time, choose option 1.
+
+Enter these details:
+- Email address
+- Username
+- Password
+
+System will create your account.
 
 ### Login
 
-1. When prompted, choose to login
-2. Enter your registered email
-3. Enter your password
-4. Upon successful authentication, you can start chatting
+If you already have account, choose option 2.
 
-### Chatting
+Enter your email and password.
 
-- Type your message and press Enter to send
-- Messages from the other party will appear automatically
-- Type "exit" to end the session
+### Send Messages
 
-### Session Closure
+After login, you can type messages.
+- Type your message
+- Press Enter to send
+- Type "exit" to quit
 
-When you exit:
-- A transcript file is saved in `transcripts/`
-- A session receipt is generated in `receipts/`
-- These can be used for offline verification
+### End Session
 
-## Offline Verification
+When you type "exit", system will:
+- Save all messages to transcript file
+- Create cryptographic receipt
+- Close connection
 
-To verify a chat transcript:
+## Verify Messages Later
+
+You can check if messages are real using this command:
 
 ```bash
-python verify.py --transcript transcripts/session_123.txt --receipt receipts/session_123_client_receipt.json --cert certs/server_cert.pem
+python verify.py --transcript transcripts/session_xxx.txt --receipt receipts/session_xxx_client_receipt.json --cert certs/server_cert.pem
 ```
 
-This will verify:
-- Each message signature
-- The transcript hash
-- The receipt signature
+Replace "session_xxx" with your actual session ID.
 
-## Testing
+## Test the System
 
-### Certificate Validation Test
+### Test Certificates
 
-Test with expired, self-signed, or untrusted certificates to verify proper rejection and error logging.
+Try these tests to see certificate validation:
+- Use expired certificate (should fail)
+- Use self-signed certificate (should fail)
+- Use certificate from different CA (should fail)
 
-### Tampering Test
+### Test Message Security
 
-Modify a message ciphertext to verify signature verification fails with `SIG_FAIL` error.
+Try these tests:
+- Change message content (should fail)
+- Send old message again (should fail)
+- Change sequence number (should fail)
 
-### Replay Test
+### Test with Wireshark
 
-Resend an old message to verify replay detection with `REPLAY` error.
+1. Open Wireshark
+2. Start capture on loopback (127.0.0.1)
+3. Use filter: tcp.port == 8443
+4. Run registration and chat
+5. Check that no passwords or messages are visible
 
-### Wireshark Test
-
-1. Start Wireshark on loopback interface (127.0.0.1)
-2. Apply display filter: `tcp.port == 8443` (or your configured SERVER_PORT)
-3. Start capture
-4. Run registration and chat session
-5. Stop capture
-6. Verify no plaintext credentials or messages are visible
-7. Confirm only base64-encoded ciphertext is transmitted
-8. Save PCAP file for documentation
-
-## Project Structure
+## Project Files
 
 ```
 securechat/
-├── certs/                  # Certificate files (gitignored)
-├── scripts/                # Certificate generation scripts
+├── certs/                  # Certificate files
+├── scripts/                # Certificate creation scripts
 │   ├── gen_ca.py
 │   └── gen_cert.py
-├── transcripts/            # Session transcripts (gitignored)
-├── receipts/               # Session receipts (gitignored)
-├── server.py               # Server application
-├── client.py               # Client application
-├── verify.py               # Offline verification tool
-├── crypto_utils.py         # Cryptography utilities
-├── db_utils.py             # Database utilities
-├── protocol.py             # Message protocol
-├── transcript_utils.py     # Transcript logging
-├── requirements.txt        # Python dependencies
-├── .env.example            # Example environment variables
+├── transcripts/            # Message logs
+├── receipts/               # Cryptographic receipts
+├── server.py               # Server program
+├── client.py               # Client program
+├── verify.py               # Verification tool
+├── crypto_utils.py         # Encryption functions
+├── db_utils.py             # Database functions
+├── protocol.py             # Message format
+├── transcript_utils.py     # Logging functions
+├── requirements.txt        # Required packages
+├── .env.example            # Example settings
 ├── .gitignore              # Git ignore rules
 └── README.md               # This file
 ```
 
-## Message Formats
+## Message Format Examples
 
-### Control Plane Messages
+### Registration Message
 
-**Hello Message:**
-```json
-{
-  "type": "hello",
-  "client_cert": "...PEM...",
-  "nonce": "base64_encoded_nonce"
-}
-```
-
-**Registration Message:**
 ```json
 {
   "type": "register",
   "email": "user@example.com",
   "username": "username",
-  "pwd": "base64_encoded_salted_hash",
+  "pwd": "base64_encoded_hash",
   "salt": "base64_encoded_salt"
 }
 ```
 
-**Login Message:**
-```json
-{
-  "type": "login",
-  "email": "user@example.com",
-  "pwd": "base64_encoded_salted_hash",
-  "nonce": "base64_encoded_nonce"
-}
-```
+### Chat Message
 
-### Key Agreement Messages
-
-**DH Client Message:**
-```json
-{
-  "type": "dh_client",
-  "g": 2,
-  "p": 123456789,
-  "A": 987654321
-}
-```
-
-### Data Plane Messages
-
-**Chat Message:**
 ```json
 {
   "type": "msg",
   "seqno": 1,
-  "ts": 1700000000000,
+  "ts": 1700000000123,
   "ct": "base64_encoded_ciphertext",
   "sig": "base64_encoded_signature"
 }
 ```
 
-### Non-Repudiation Messages
+### Session Receipt
 
-**Session Receipt:**
 ```json
 {
   "type": "receipt",
-  "peer": "client",
+  "peer": "server",
   "first_seq": 1,
   "last_seq": 10,
-  "transcript_sha256": "hex_encoded_hash",
-  "sig": "base64_encoded_signature"
+  "transcript_sha256": "hex_hash",
+  "sig": "base64_signature"
 }
 ```
 
-## Security Properties
+## Security Features
 
 ### Confidentiality
-- All credentials encrypted with temporary DH-derived AES key
-- All messages encrypted with session-specific AES key
-- No plaintext transmitted over network
+All messages encrypted with AES-128. Nobody can read messages except sender and receiver.
 
 ### Integrity
-- All messages signed with RSA private key
-- SHA-256 digest covers sequence number, timestamp, and ciphertext
-- Any modification invalidates signature
+Every message has digital signature. Any change to message will be detected.
 
 ### Authenticity
-- Mutual certificate validation using CA
-- RSA signatures prove message origin
-- Certificate fingerprints in transcript
+Certificates prove identity. You know who you are talking to.
 
 ### Non-Repudiation
-- Append-only transcripts log all messages
-- Session receipts signed with private key
-- Offline verification proves conversation occurred
+All messages saved in transcript. Cryptographic receipt proves conversation happened.
 
 ### Replay Protection
-- Strictly increasing sequence numbers
-- Sequence number included in signature
-- Old messages rejected immediately
+Sequence numbers prevent old messages from being sent again.
 
-## Troubleshooting
+## Common Problems
 
-### Database Connection Error
-- Verify MySQL is running
-- Check credentials in `.env` file
-- Ensure database and user exist
+### Cannot Connect to Database
+- Check MySQL is running
+- Check username and password in .env file
+- Check database exists
 
-### Certificate Validation Error
-- Regenerate certificates if expired
-- Ensure CA certificate is present
-- Check certificate file permissions
+### Certificate Error
+- Run certificate generation scripts again
+- Check certificate files exist in certs folder
+- Check certificates not expired
 
 ### Connection Refused
-- Verify server is running
-- Check SERVER_HOST and SERVER_PORT in `.env`
-- Ensure firewall allows connection
+- Check server is running
+- Check SERVER_HOST and SERVER_PORT in .env file
+- Check firewall settings
 
-### Import Errors
+### Import Error
 - Activate virtual environment
-- Reinstall dependencies: `pip install -r requirements.txt`
-
-### Message Signature Verification Fails (SIG_FAIL)
-- Ensure both client and server have correct certificates
-- Verify system clocks are synchronized
-- Check that certificates haven't expired
-
-### Replay Detection Triggering Incorrectly
-- Ensure messages are sent in order
-- Don't resend messages manually
-- Restart session if sequence numbers become desynchronized
-
-### Transcript Verification Fails
-- Ensure transcript file hasn't been modified
-- Use the correct peer certificate for verification
-- Verify receipt file matches the transcript
+- Run: pip install -r requirements.txt
 
 ## GitHub Repository
 
-**Repository URL:** https://github.com/Abdullahzg/Infosec_A2_i221077
+Repository URL: https://github.com/Abdullahzg/Infosec_A2_i221077
 
-This project is developed with incremental commits showing the development process. Check the commit history to see the implementation progress.
+This project has multiple commits showing development progress. Check commit history to see implementation steps.
+
+## Database Schema
+
+The users table stores account information:
+
+```sql
+CREATE TABLE users (
+  id int NOT NULL AUTO_INCREMENT,
+  email varchar(255) NOT NULL,
+  username varchar(255) NOT NULL,
+  salt varbinary(16) NOT NULL,
+  pwd_hash char(64) NOT NULL,
+  created_at timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (id),
+  UNIQUE KEY (email),
+  UNIQUE KEY (username)
+);
+```
+
+Important notes:
+- Passwords are never stored in plain text
+- Each user has unique random salt
+- Password hash is SHA-256 of salt plus password
 
 ## License
 
-This project is for educational purposes as part of an Information Security course assignment.
+This project is for educational purposes. Made for Information Security course assignment.
 
-## Acknowledgments
+## Credits
 
-- Assignment template: https://github.com/maadilrehman/securechat-skeleton
-- Python cryptography library documentation
-- MySQL connector documentation
+- Assignment template from: https://github.com/maadilrehman/securechat-skeleton
+- Python cryptography library
+- MySQL connector library
