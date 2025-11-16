@@ -1,0 +1,39 @@
+# Certificate files (private keys and CA)
+certs/*.pem
+!certs/.gitkeep
+
+# Transcript files
+transcripts/*
+!transcripts/.gitkeep
+
+# Receipt files
+receipts/*
+!receipts/.gitkeep
+
+# Environment variables
+.env
+
+# Database dumps (may contain sensitive data)
+# Include these manually in submission if needed
+sample_data.sql
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Virtual environment
+venv/
+env/
+ENV/
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
