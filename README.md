@@ -357,7 +357,7 @@ securechat/
 
 ## GitHub Repository
 
-**Repository URL:** [Add your GitHub repository URL here]
+**Repository URL:** https://github.com/Abdullahzg/Infosec_A2_i221077
 
 This project is developed with incremental commits showing the development process. Check the commit history to see the implementation progress.
 
